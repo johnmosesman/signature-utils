@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
-import { type EIP712Payload } from "~/lib/eip712-utils";
+import { type EIP712Payload } from "../eip712-utils";
 
 export interface SignatureResult {
   signature?: string;
