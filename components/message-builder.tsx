@@ -1,4 +1,4 @@
-import { type Message } from "../lib/eip712-utils";
+import { Message } from "../lib/eip712-utils";
 
 const PAYLOAD_TYPES = ["uint256", "address", "string", "bytes"].sort();
 
@@ -9,39 +9,36 @@ interface Props {
 
 export default function MessageBuilder({ message, setMessage }: Props) {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col border-gray-300 border rounded-md px-2 py-4">
       <form>
         <fieldset>
-          <div className="mb-4">
-            <label htmlFor="custom-type-name" className="block">
-              Custom Type Name
-            </label>
+          <div>
+            <label htmlFor="custom-type-name">Custom Type Name</label>
             <input
               name="primary-type"
               type="text"
-              className="w-full rounded-sm border border-gray-400 px-3 py-2"
               defaultValue={message.primaryType}
               onChange={(e) => {
                 e.preventDefault();
                 setMessage({ ...message, primaryType: e.target.value });
               }}
+              placeholder="MyMetaTx"
             />
           </div>
+
+          <div className="border border-gray-300 my-4"></div>
+
           {message.payload.map((item, index) => {
             return (
-              <div key={index} className="mt-8 border-t-2 border-gray-400 pt-4">
+              <div key={index} className="pt-4">
                 <div className="flex flex-row items-center justify-between">
-                  <div className="mb-4 w-1/2">
-                    <label
-                      htmlFor={`message-attribute-name-${index}`}
-                      className="block"
-                    >
+                  <div className="mb-4 w-1/2 mr-2">
+                    <label htmlFor={`message-attribute-name-${index}`}>
                       Name
                     </label>
                     <input
                       name={`message-attribute-name-${index}`}
                       type="text"
-                      className="w-full rounded-sm border border-gray-400 px-3 py-2"
                       value={message.payload[index]["name"]}
                       onChange={(e) => {
                         e.preventDefault();
@@ -51,20 +48,16 @@ export default function MessageBuilder({ message, setMessage }: Props) {
                           ...message,
                         });
                       }}
+                      placeholder="from"
                     />
                   </div>
 
                   <div className="mb-4 w-1/2">
-                    <label
-                      htmlFor={`message-attribute-type-${index}`}
-                      className="block text-right"
-                    >
+                    <label htmlFor={`message-attribute-type-${index}`}>
                       Type
                     </label>
                     <select
                       name={`message-attribute-type-${index}`}
-                      className="w-full rounded-sm border border-gray-400 px-3 py-3 text-right"
-                      style={{ height: "42px" }}
                       value={message.payload[index]["type"]}
                       onChange={(e) => {
                         e.preventDefault();
@@ -96,7 +89,6 @@ export default function MessageBuilder({ message, setMessage }: Props) {
                   <input
                     name={`message-attribute-value-${index}`}
                     type="text"
-                    className="w-full rounded-sm border border-gray-400 px-3 py-2"
                     value={message.payload[index]["value"]}
                     onChange={(e) => {
                       e.preventDefault();
@@ -104,6 +96,7 @@ export default function MessageBuilder({ message, setMessage }: Props) {
                       item.value = e.target.value;
                       setMessage({ ...message });
                     }}
+                    placeholder="0xabcabcabcabcabcabcabcabcabcabcabcabcabca"
                   />
                 </div>
 

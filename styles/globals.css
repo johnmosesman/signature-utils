@@ -3,9 +3,13 @@
 @tailwind utilities;
 
 label {
-  @apply text-xs uppercase;
+  @apply text-xs uppercase ml-2;
 }
 
 input[type="text"] {
-  @apply border-none;
+  @apply border-none w-full px-2 py-1;
+}
+
+select {
+  @apply border-none block w-full px-2 py-1;
 }

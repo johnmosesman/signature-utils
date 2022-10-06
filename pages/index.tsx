@@ -6,7 +6,7 @@ import DomainSeparatorBuilder from "../components/domain-separator-builder";
 import MessageBuilder from "../components/message-builder";
 import PayloadPreview from "../components/payload-preview";
 import SignaturePreview from "../components/signature-preview";
-import { type EIP712Payload } from "../lib/eip712-utils";
+import { EIP712Payload } from "../lib/eip712-utils";
 import { usePayload } from "../lib/hooks/use-payload";
 import { useSignature } from "../lib/hooks/use-signature";
 
@@ -96,10 +96,13 @@ const Home: NextPage = () => {
 
       <div className="lg:flex lg:flex-row lg:justify-between ">
         <div className="lg:mr-12 lg:w-1/2">
-          <DomainSeparatorBuilder domain={domain} setDomain={setDomain} />
+          <div className="mb-8">
+            <h2 className="mb-4 text-2xl">Domain Separator</h2>
+            <DomainSeparatorBuilder domain={domain} setDomain={setDomain} />
+          </div>
 
           <div className="mb-8">
-            <h2 className="mb-2 text-xl">Message</h2>
+            <h2 className="mb-4 text-2xl">Message</h2>
 
             <MessageBuilder message={message} setMessage={setMessage} />
           </div>
@@ -129,7 +132,6 @@ const Home: NextPage = () => {
       </div>
     </main>
   );
-}
-
+};
 
 export default Home;
