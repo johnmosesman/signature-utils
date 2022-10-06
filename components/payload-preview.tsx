@@ -70,8 +70,8 @@ export default function PayloadPreview({ data, copyIcon, copyText }: Props) {
                 <div key={`${hash.name}-${hash.type}`} className="ml-4">
                   &#123;
                   <div className="ml-4">
-                    <p>name: "{hash.name}",</p>
-                    <p>type: "{hash.type}",</p>
+                    <p>name: &quot;{hash.name}&quot;,</p>
+                    <p>type: &quot;{hash.type}&quot;,</p>
                   </div>
                   &#125;,
                 </div>
@@ -92,7 +92,7 @@ export default function PayloadPreview({ data, copyIcon, copyText }: Props) {
       </div>
 
       <div className="ml-4">
-        <p>primaryType: "{data.primaryType}",</p>
+        <p>primaryType: &quot;{data.primaryType}&quot;,</p>
       </div>
 
       <div className="ml-4">
