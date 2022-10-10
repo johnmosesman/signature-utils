@@ -54,10 +54,7 @@ export default function DomainSeparatorBuilder({ domain, setDomain }: Props) {
             </div>
 
             <div className="mb-4">
-              <label
-                htmlFor="verifyingContract"
-                className="block text-gray-600"
-              >
+              <label htmlFor="verifyingContract">
                 Verifying Contract Address
               </label>
               <input
