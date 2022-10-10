@@ -1,4 +1,36 @@
-import { BigNumber } from "ethers";
+import { BigNumber, constants } from "ethers";
+import { hexlify, hexZeroPad } from "ethers/lib/utils";
+
+const chainId = 137; // Polygon mainnet
+
+export const DEFAULT_DOMAIN: EIP712Payload["domain"] = {
+  name: "MyApp",
+  version: "1.0.0",
+  chainId: chainId,
+  verifyingContract: "0xabcabcabcabcabcabcabcabcabcabcabcabcabca",
+  salt: hexZeroPad(hexlify(chainId), 32),
+};
+
+export const DEFAULT_MESSAGE: Message = {
+  primaryType: "MetaTx",
+  payload: [
+    {
+      name: "from",
+      value: constants.AddressZero,
+      type: "address",
+    },
+    {
+      name: "to",
+      value: constants.AddressZero,
+      type: "address",
+    },
+    {
+      name: "value",
+      value: (1e18).toString(),
+      type: "uint256",
+    },
+  ],
+};
 
 export interface MessagePayloadField {
   name: string;
@@ -30,7 +62,7 @@ export type EIP712DomainField =
     }
   | {
       name: "salt";
-      type: "bytes";
+      type: "bytes32";
     };
 
 export type EIP712CustomField = {
