@@ -110,21 +110,21 @@ const Home: NextPage = () => {
 
         <div className="lg:w-1/2">
           <div className="mb-8">
-            <h2 className="mb-4 text-xl">EIP-712 Payload</h2>
+            <h2 className="mb-4 text-2xl">Signature</h2>
 
-            <PayloadPreview
+            <SignaturePreview
+              signatureResult={signatureResult}
               copyIcon={copyIcon}
-              data={data}
               copyText={copyText}
             />
           </div>
 
           <div>
-            <h2 className="mb-4 text-xl">Signature</h2>
+            <h2 className="mb-4 text-2xl">EIP-712 Payload</h2>
 
-            <SignaturePreview
-              signatureResult={signatureResult}
+            <PayloadPreview
               copyIcon={copyIcon}
+              data={data}
               copyText={copyText}
             />
           </div>

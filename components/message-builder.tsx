@@ -112,7 +112,7 @@ export default function MessageBuilder({ message, setMessage }: Props) {
                       payload: [...newPayload],
                     });
                   }}
-                  className="rounded-sm border border-gray-400 px-3 py-2"
+                  className="rounded border border-gray-300 px-3 py-1"
                 >
                   Remove
                 </button>
@@ -134,7 +134,7 @@ export default function MessageBuilder({ message, setMessage }: Props) {
                 payload: [...message.payload, defaultMessagePayload],
               });
             }}
-            className="mt-4 rounded-sm border border-gray-400 px-3 py-2"
+            className="mt-4 rounded border border-gray-300 px-3 py-2"
           >
             Add Another
           </button>

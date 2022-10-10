@@ -3,13 +3,13 @@
 @tailwind utilities;
 
 label {
-  @apply text-xs uppercase ml-2;
+  @apply text-xs uppercase mb-1;
 }
 
 input[type="text"] {
-  @apply border-none w-full px-2 py-1;
+  @apply w-full px-2 py-1 border border-gray-300 rounded;
 }
 
 select {
-  @apply border-none block w-full px-2 py-1;
+  @apply block w-full px-2 h-[35px] border border-gray-300 rounded;
 }
