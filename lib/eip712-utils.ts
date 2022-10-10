@@ -30,7 +30,7 @@ export type EIP712DomainField =
     }
   | {
       name: "salt";
-      type: "string";
+      type: "bytes";
     };
 
 export type EIP712CustomField = {
@@ -110,7 +110,7 @@ export const buildPayload = (
       ...eip712DomainType,
       {
         name: "salt",
-        type: "string",
+        type: "bytes32",
       },
     ];
   }
