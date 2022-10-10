@@ -1,28 +1,17 @@
-import { Contract } from "ethers";
 import { NextPage } from "next";
 import { useState } from "react";
-import { ABI, FetchABIResponse } from "./api/abi";
+import { useABI } from "../lib/hooks/use-abi";
 
-const mUSDC_ADDRESS = "0x2791bca1f2de4661ed88a30c99a7a9449aa84174";
+const mUSDC_ADDRESS = "0xdd9185db084f5c4fff3b4f70e7ba62123b812226";
 
-const getABI = async (contractAddress: string): Promise<ABI | null> => {
-  console.log("getABI()");
-
-  const response = await fetch(`/api/abi?contractAddress=${contractAddress}`, {
-    method: "GET",
-  });
-
-  console.log("response", response);
-
-  const abi: ABI | null = await response.json();
-
-  return abi;
+const executeFunction = async (functionName: string) => {
+  console.log("functionName", functionName);
+  //
 };
 
 const contractAddressChanged = async (
   e: React.ChangeEvent<HTMLInputElement>,
-  setContractAddress: Function,
-  setABI: Function
+  setContractAddress: Function
 ) => {
   e.preventDefault();
 
@@ -34,41 +23,49 @@ const contractAddressChanged = async (
     return;
   }
 
-  const abi: ABI | null = await getABI(contractAddress);
-
-  console.log("abi fetched", abi);
-
-  if (!abi) {
-    return;
-  }
-
-  console.log("worked");
-
   setContractAddress(contractAddress);
-  setABI(abi);
 };
 
 const Contracts: NextPage = () => {
-  const [contractAddress, setContractAddress] = useState<string>();
-  const [abi, setABI] = useState<ABI>();
+  const [contractAddress, setContractAddress] = useState<string>(mUSDC_ADDRESS);
+
+  const abi = useABI(contractAddress);
+  const filteredABI = abi?.filter((item) => item.type === "function");
 
   return (
     <main className="relative mx-auto mt-12 min-h-screen bg-white px-4 pb-12 md:px-8 lg:mt-24 lg:max-w-7xl ">
-      <h1 className="mb-8 text-3xl">Contracts Tester</h1>
+      <div className="mb-8">
+        <h1 className="mb-8 text-3xl">Contracts Tester</h1>
 
-      <form>
-        <label htmlFor="contractAddress">Contract Address</label>
-        <input
-          name="contractAddress"
-          type="text"
-          className="w-full rounded-sm border border-gray-400 py-1"
-          defaultValue={contractAddress}
-          onChange={(e) =>
-            contractAddressChanged(e, setContractAddress, setABI)
-          }
-          placeholder="0xabcabcabcabcabcabcabcabcabcabcabcabcabca"
-        />
-      </form>
+        <form>
+          <label htmlFor="contractAddress">Contract Address</label>
+          <input
+            name="contractAddress"
+            type="text"
+            className="w-full rounded-sm border border-gray-400 py-1"
+            defaultValue={contractAddress}
+            onChange={(e) => contractAddressChanged(e, setContractAddress)}
+            placeholder="0xabcabcabcabcabcabcabcabcabcabcabcabcabca"
+          />
+        </form>
+      </div>
+
+      <div>
+        <h1 className="mb-8 text-3xl">ABI</h1>
+
+        {filteredABI &&
+          filteredABI.length > 0 &&
+          filteredABI.map((item, index) => {
+            return (
+              <div key={index} className="flex flex-row mb-4">
+                <p className="mr-4">{item.name}</p>
+                <button onClick={() => executeFunction(item.name)}>
+                  Execute
+                </button>
+              </div>
+            );
+          })}
+      </div>
     </main>
   );
 };

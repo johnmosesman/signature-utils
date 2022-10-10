@@ -1,14 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-
-// TODO: Add more specific types especially for type fields (address, bytes, etc)
-export type ABI = {
-  inputs: { internalType: string; name: string; type: string }[];
-  name: string;
-  outputs: { internalType: string; name: string; type: string }[];
-  stateMutability: string;
-  type: string;
-}[];
+import { ABI } from "../../lib/hooks/use-abi";
 
 type ABIResult = {
   status: "1" | "0";
@@ -41,23 +33,18 @@ const fetchABI = async (contractAddress: string): Promise<ABI | null> => {
   }
 };
 
-export type FetchABIResponse = {
-  abi?: ABI;
-  errorMessage?: string;
-};
-
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<FetchABIResponse>
+  res: NextApiResponse<ABI | null>
 ) {
   const abi: ABI | null = await fetchABI(
     req.query["contractAddress"] as string
   );
 
   if (!abi) {
-    res.status(200).json({ errorMessage: "Error fetching contract ABI" });
+    res.status(400).json(null);
     return;
   }
 
-  res.status(200).json({ abi });
+  res.status(200).json(abi);
 }
