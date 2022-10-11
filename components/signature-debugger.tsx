@@ -50,27 +50,25 @@ export default function SignatureDebugger({
   const signatureResult = useSignature(data);
 
   return (
-    <main className="relative mx-auto mt-12 min-h-screen bg-white px-4 pb-12 md:px-8 lg:mt-24 lg:max-w-7xl ">
-      <h1 className="mb-4 text-3xl">Signature Debugger</h1>
+    <>
+      <h1 className="mb-4 text-sm uppercase">Signature Debugger</h1>
 
       <div className="lg:flex lg:flex-row lg:justify-between ">
         <div className="lg:mr-12 lg:w-1/2">
           <div className="mb-8">
-            <h2 className="mb-4 text-2xl">Domain Separator</h2>
+            <h2 className="mb-2 text-xl">Domain Separator</h2>
             <DomainSeparatorBuilder domain={domain} setDomain={setDomain} />
           </div>
 
           <div className="mb-8">
-            <h2 className="mb-4 text-2xl">Message</h2>
-
+            <h2 className="mb-2 text-xl">Message</h2>
             <MessageBuilder message={message} setMessage={setMessage} />
           </div>
         </div>
 
         <div className="lg:w-1/2">
           <div className="mb-8">
-            <h2 className="mb-4 text-2xl">Signature</h2>
-
+            <h2 className="mb-2 text-xl">Signature</h2>
             <SignaturePreview
               signatureResult={signatureResult}
               copyIcon={copyIcon}
@@ -79,7 +77,7 @@ export default function SignatureDebugger({
           </div>
 
           <div>
-            <h2 className="mb-4 text-2xl">EIP-712 Payload</h2>
+            <h2 className="mb-2 text-xl">EIP-712 Payload</h2>
 
             <PayloadPreview
               copyIcon={copyIcon}
@@ -89,6 +87,6 @@ export default function SignatureDebugger({
           </div>
         </div>
       </div>
-    </main>
+    </>
   );
 }

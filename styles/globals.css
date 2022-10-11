@@ -7,9 +7,9 @@ label {
 }
 
 input[type="text"] {
-  @apply w-full px-2 py-1 border border-gray-300 rounded;
+  @apply w-full px-2 py-1 border-b border-gray-300;
 }
 
 select {
-  @apply block w-full px-2 h-[35px] border border-gray-300 rounded;
+  @apply block w-full px-2 h-[35px] border-b border-gray-300;
 }

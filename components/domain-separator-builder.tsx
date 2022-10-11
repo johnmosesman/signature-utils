@@ -16,7 +16,6 @@ export default function DomainSeparatorBuilder({ domain, setDomain }: Props) {
               <input
                 name="name"
                 type="text"
-                className="w-full rounded-sm border border-gray-400 py-1"
                 defaultValue={domain?.name}
                 onChange={(e) => setDomain({ ...domain, name: e.target.value })}
                 placeholder="MyCoolApp"
@@ -29,7 +28,6 @@ export default function DomainSeparatorBuilder({ domain, setDomain }: Props) {
                 <input
                   name="version"
                   type="text"
-                  className="w-full rounded-sm border border-gray-400 py-1"
                   defaultValue={domain?.version}
                   onChange={(e) =>
                     setDomain({ ...domain, version: e.target.value })
@@ -43,7 +41,6 @@ export default function DomainSeparatorBuilder({ domain, setDomain }: Props) {
                 <input
                   name="chainId"
                   type="text"
-                  className="w-full rounded-sm border border-gray-400 py-1"
                   defaultValue={domain?.chainId}
                   onChange={(e) =>
                     setDomain({ ...domain, chainId: e.target.value })
@@ -60,7 +57,6 @@ export default function DomainSeparatorBuilder({ domain, setDomain }: Props) {
               <input
                 name="verifyingContract"
                 type="text"
-                className="w-full rounded-sm border border-gray-400 py-1"
                 defaultValue={domain?.verifyingContract}
                 onChange={(e) =>
                   setDomain({ ...domain, verifyingContract: e.target.value })
@@ -74,7 +70,6 @@ export default function DomainSeparatorBuilder({ domain, setDomain }: Props) {
               <input
                 name="salt"
                 type="text"
-                className="w-full rounded-sm border border-gray-400 py-1"
                 defaultValue={domain?.salt}
                 onChange={(e) => setDomain({ ...domain, salt: e.target.value })}
                 placeholder="0x0000000000000000000000000000000000000000000000000000000000000089"
