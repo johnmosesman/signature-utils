@@ -1,4 +1,4 @@
-import { EIP712Payload } from "../lib/eip712-utils";
+import { EIP712Payload } from "../../lib/eip712-utils";
 
 interface Props {
   domain: EIP712Payload["domain"];

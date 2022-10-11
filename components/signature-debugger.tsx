@@ -1,10 +1,10 @@
-import DomainSeparatorBuilder from "../components/domain-separator-builder";
-import MessageBuilder from "../components/message-builder";
-import PayloadPreview from "../components/payload-preview";
-import SignaturePreview from "../components/signature-preview";
+import DomainSeparatorBuilder from "./signature-debugger/domain-separator-builder";
+import MessageBuilder from "./signature-debugger/message-builder";
+import PayloadPreview from "./signature-debugger/payload-preview";
+import SignaturePreview from "./signature-debugger/signature-preview";
 import { EIP712Payload, Message } from "../lib/eip712-utils";
 import { usePayload } from "../lib/hooks/use-payload";
-import { useSignature } from "../lib/hooks/use-signature";
+import { SignatureResult, useSignature } from "../lib/hooks/use-signature";
 
 const copyIcon = (
   <svg
@@ -35,6 +35,10 @@ type Props = {
   setDomain: Function;
   message: Message;
   setMessage: Function;
+  payload?: EIP712Payload;
+  signatureResult?: SignatureResult;
+  copyIcon: JSX.Element;
+  copyText: Function;
 };
 
 export default function SignatureDebugger({
@@ -42,16 +46,17 @@ export default function SignatureDebugger({
   setDomain,
   message,
   setMessage,
+  payload,
+  signatureResult,
+  copyIcon,
+  copyText,
 }: Props) {
-  const data = usePayload(domain, message);
-
-  console.log("data is", data);
-
-  const signatureResult = useSignature(data);
-
   return (
     <>
-      <h1 className="mb-4 text-sm uppercase">Signature Debugger</h1>
+      <p className="mb-8">
+        Build your custom signature message and view its EIP712 payload and
+        signature.
+      </p>
 
       <div className="lg:flex lg:flex-row lg:justify-between ">
         <div className="lg:mr-12 lg:w-1/2">
@@ -81,7 +86,7 @@ export default function SignatureDebugger({
 
             <PayloadPreview
               copyIcon={copyIcon}
-              data={data}
+              payload={payload}
               copyText={copyText}
             />
           </div>

@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 
 // TODO: Add more specific types especially for type fields (address, bytes, etc)
-export type ABI = {
+
+export type ABIItem = {
   inputs: { internalType: string; name: string; type: string }[];
   name: string;
   outputs: { internalType: string; name: string; type: string }[];
   stateMutability: string;
   type: string;
-}[];
+};
+
+export type ABI = ABIItem[];
 
 const fetchABI = async (contractAddress: string): Promise<ABI | null> => {
   console.log("getABI()");

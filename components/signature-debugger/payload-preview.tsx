@@ -4,16 +4,16 @@ import {
   type EIP712DomainAttribute,
   type EIP712DomainField,
   type EIP712Payload,
-} from "../lib/eip712-utils";
+} from "../../lib/eip712-utils";
 
 interface Props {
-  data?: EIP712Payload;
+  payload?: EIP712Payload;
   copyIcon: React.ReactElement;
   copyText: Function;
 }
 
-export default function PayloadPreview({ data, copyIcon, copyText }: Props) {
-  if (!data) {
+export default function PayloadPreview({ payload, copyIcon, copyText }: Props) {
+  if (!payload) {
     return <></>;
   }
 
@@ -22,15 +22,15 @@ export default function PayloadPreview({ data, copyIcon, copyText }: Props) {
       className="group relative cursor-pointer rounded-sm bg-gray-100 p-4"
       style={{ fontFamily: "monospace", overflowWrap: "break-word" }}
       onClick={(e) => {
-        Object.entries(data.message).forEach(([key, value]) => {
+        Object.entries(payload.message).forEach(([key, value]) => {
           if (BigNumber.isBigNumber(value)) {
-            data.message[key] = `$TEMP$${value}$TEMP$`;
+            payload.message[key] = `$TEMP$${value}$TEMP$`;
           }
         });
 
         // Rendering BigNumber in JSON wraps the values in quotes as a string,
         // but we want it to display as the number value.
-        const json = JSON.stringify(data, null, 4)
+        const json = JSON.stringify(payload, null, 4)
           .replace('"$TEMP$', "")
           .replace('$TEMP$"', "");
 
@@ -43,8 +43,8 @@ export default function PayloadPreview({ data, copyIcon, copyText }: Props) {
         <p>domain: &#123;</p>
 
         <div className="ml-4">
-          {Object.keys(data.domain).map((key, index) => {
-            const value = data.domain[key as EIP712DomainAttribute];
+          {Object.keys(payload.domain).map((key, index) => {
+            const value = payload.domain[key as EIP712DomainAttribute];
             const text = key === "chainId" ? value : `"${value}"`;
 
             return (
@@ -63,8 +63,8 @@ export default function PayloadPreview({ data, copyIcon, copyText }: Props) {
       </div>
 
       <div className="ml-4">
-        {Object.keys(data.types).map((key, index) => {
-          const attributes = data.types[key].map(
+        {Object.keys(payload.types).map((key, index) => {
+          const attributes = payload.types[key].map(
             (hash: EIP712DomainField | EIP712CustomField) => {
               return (
                 <div key={`${hash.name}-${hash.type}`} className="ml-4">
@@ -92,15 +92,15 @@ export default function PayloadPreview({ data, copyIcon, copyText }: Props) {
       </div>
 
       <div className="ml-4">
-        <p>primaryType: &quot;{data.primaryType}&quot;,</p>
+        <p>primaryType: &quot;{payload.primaryType}&quot;,</p>
       </div>
 
       <div className="ml-4">
         <p>message: &#123;</p>
 
         <div className="ml-4">
-          {Object.keys(data.message).map((key, index) => {
-            const value = data.message[key];
+          {Object.keys(payload.message).map((key, index) => {
+            const value = payload.message[key];
             let text;
 
             if (BigNumber.isBigNumber(value)) {
