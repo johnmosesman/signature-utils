@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { EIP712Payload } from "../../lib/eip712-utils";
 import { ABIItem } from "../../lib/hooks/use-abi";
+import { SignatureResult } from "../../lib/hooks/use-signature";
 
 const executeFunction = async (functionName: string) => {
   console.log("functionName", functionName);
@@ -9,15 +10,20 @@ const executeFunction = async (functionName: string) => {
 
 type Props = {
   payload?: EIP712Payload;
+  signatureResult?: SignatureResult;
   item: ABIItem;
 };
-export default function FunctionTester({ payload, item }: Props) {
+export default function FunctionTester({
+  payload,
+  signatureResult,
+  item,
+}: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
     <div className="bg-gray-100 flex flex-col mb-4 px-4 py-2">
       <div
-        className="flex flex-row items-center justify-between"
+        className="flex flex-row items-center justify-between cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
       >
         <p className="mr-4">{item.name}</p>
@@ -59,12 +65,34 @@ export default function FunctionTester({ payload, item }: Props) {
       {isOpen && (
         <div className="bg-gray-100 mt-4">
           {item.inputs.map((input, i) => {
+            const fieldName = input.name;
+            let defaultValue;
+
+            if (payload?.message[fieldName]) {
+              defaultValue = payload?.message[fieldName];
+            } else if (signatureResult?.v && fieldName.toLowerCase() === "v") {
+              defaultValue = signatureResult.v;
+            } else if (signatureResult?.r && fieldName.toLowerCase() === "r") {
+              defaultValue = signatureResult.r;
+            } else if (signatureResult?.s && fieldName.toLowerCase() === "s") {
+              defaultValue = signatureResult.s;
+            } else if (
+              signatureResult?.signature &&
+              fieldName.toLowerCase() === "signature"
+            ) {
+              defaultValue = signatureResult.signature;
+            }
+
             return (
               <div key={i} className="mb-2">
                 <label className="mb-2">
                   {input.name} ({input.type})
                 </label>
-                <input name={input.name} type="text" />
+                <input
+                  name={input.name}
+                  type="text"
+                  defaultValue={defaultValue}
+                />
               </div>
             );
           })}

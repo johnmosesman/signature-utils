@@ -51,6 +51,7 @@ const Home: NextPage = () => {
   console.log("data is", data);
 
   const signatureResult = useSignature(data);
+  console.log("signatureResult", signatureResult);
 
   return (
     <main className="relative mx-auto mt-12 min-h-screen bg-white px-4 pb-12 md:px-8 lg:mt-24 lg:max-w-7xl ">

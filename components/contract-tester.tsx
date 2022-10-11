@@ -85,7 +85,14 @@ const ContractTester = ({
               {filteredABI &&
                 filteredABI.length > 0 &&
                 filteredABI.map((item, index) => {
-                  return <FunctionTester item={item} key={index} />;
+                  return (
+                    <FunctionTester
+                      item={item}
+                      payload={payload}
+                      signatureResult={signatureResult}
+                      key={index}
+                    />
+                  );
                 })}
             </div>
           </div>
