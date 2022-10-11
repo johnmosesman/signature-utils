@@ -1,4 +1,4 @@
-import { SignatureResult } from "../lib/hooks/use-signature";
+import { SignatureResult } from "../../lib/hooks/use-signature";
 
 interface Props {
   signatureResult: SignatureResult | undefined;

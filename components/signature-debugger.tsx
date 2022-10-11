@@ -73,7 +73,7 @@ export default function SignatureDebugger({
 
         <div className="lg:w-1/2">
           <div className="mb-8">
-            <h2 className="mb-2 text-xl">Signature</h2>
+            <h2 className="mb-2 text-xl">Signature Result</h2>
             <SignaturePreview
               signatureResult={signatureResult}
               copyIcon={copyIcon}

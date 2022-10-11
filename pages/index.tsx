@@ -54,7 +54,7 @@ const Home: NextPage = () => {
   console.log("signatureResult", signatureResult);
 
   return (
-    <main className="relative mx-auto mt-12 min-h-screen bg-white px-4 pb-12 md:px-8 lg:mt-24 lg:max-w-7xl ">
+    <main className="relative mx-auto mt-12 min-h-screen bg-white px-4 pb-12 md:px-8 lg:mt-24 lg:max-w-7xl">
       <div>
         <button
           onClick={() => setPanel(PanelType.SignatureDebugger)}
@@ -64,7 +64,7 @@ const Home: NextPage = () => {
               : ""
           }`}
         >
-          Signature Debugger
+          Build EIP712 Signatures
         </button>
 
         <button
@@ -73,7 +73,7 @@ const Home: NextPage = () => {
             panel === PanelType.ContractTester ? "bg-gray-600 text-white" : ""
           }`}
         >
-          Contracts Tester
+          Test Signatures
         </button>
 
         <div className="border-t border-gray-300 my-4"></div>

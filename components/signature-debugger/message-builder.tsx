@@ -1,4 +1,4 @@
-import { Message } from "../lib/eip712-utils";
+import { Message } from "../../lib/eip712-utils";
 
 const PAYLOAD_TYPES = ["uint256", "address", "string", "bytes"].sort();
 
@@ -26,8 +26,6 @@ export default function MessageBuilder({ message, setMessage }: Props) {
             />
           </div>
 
-          <div className="border border-gray-300 my-4"></div>
-
           {message.payload.map((item, index) => {
             return (
               <div key={index} className="pt-4">
@@ -39,10 +37,9 @@ export default function MessageBuilder({ message, setMessage }: Props) {
                     <input
                       name={`message-attribute-name-${index}`}
                       type="text"
-                      value={message.payload[index]["name"]}
+                      value={item["name"]}
                       onChange={(e) => {
                         e.preventDefault();
-                        const item = message.payload[index];
                         item.name = e.target.value;
                         setMessage({
                           ...message,
@@ -58,10 +55,9 @@ export default function MessageBuilder({ message, setMessage }: Props) {
                     </label>
                     <select
                       name={`message-attribute-type-${index}`}
-                      value={message.payload[index]["type"]}
+                      value={item["type"]}
                       onChange={(e) => {
                         e.preventDefault();
-                        const item = message.payload[index];
                         item.type = e.target.value;
                         setMessage({
                           ...message,
@@ -89,10 +85,9 @@ export default function MessageBuilder({ message, setMessage }: Props) {
                   <input
                     name={`message-attribute-value-${index}`}
                     type="text"
-                    value={message.payload[index]["value"]}
+                    value={item["value"]}
                     onChange={(e) => {
                       e.preventDefault();
-                      const item = message.payload[index];
                       item.value = e.target.value;
                       setMessage({ ...message });
                     }}
