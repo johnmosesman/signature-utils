@@ -3,8 +3,7 @@ import MessageBuilder from "./signature-debugger/message-builder";
 import PayloadPreview from "./signature-debugger/payload-preview";
 import SignaturePreview from "./signature-debugger/signature-preview";
 import { EIP712Payload, Message } from "../lib/eip712-utils";
-import { usePayload } from "../lib/hooks/use-payload";
-import { SignatureResult, useSignature } from "../lib/hooks/use-signature";
+import { SignatureResult } from "../lib/hooks/use-signature";
 
 const copyIcon = (
   <svg
