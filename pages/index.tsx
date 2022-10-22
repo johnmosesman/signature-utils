@@ -1,5 +1,6 @@
+import { ethers, providers, Wallet } from "ethers";
 import type { NextPage } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ContractTester from "../components/contract-tester";
 import SignatureDebugger from "../components/signature-debugger";
 import {
@@ -23,7 +24,7 @@ const copyIcon = (
     viewBox="0 0 24 24"
     strokeWidth={1.5}
     stroke="currentColor"
-    className="fil-current h-6 w-6 stroke-current text-gray-600"
+    className="fil-current stroke-current text-gray-600"
   >
     <path
       strokeLinecap="round"
@@ -53,31 +54,59 @@ const Home: NextPage = () => {
   const signatureResult = useSignature(data);
   console.log("signatureResult", signatureResult);
 
+  const [wallet, setWallet] = useState<Wallet>();
+
+  useEffect(() => {
+    setWallet(ethers.Wallet.createRandom());
+  }, []);
+
   return (
     <main className="relative mx-auto mt-12 min-h-screen bg-white px-4 pb-12 md:px-8 lg:mt-24 lg:max-w-7xl">
-      <div>
-        <button
-          onClick={() => setPanel(PanelType.SignatureDebugger)}
-          className={`px-4 py-2 rounded-tl rounded-bl bg-gray-100 text-sm uppercase ${
-            panel === PanelType.SignatureDebugger
-              ? "bg-gray-600 text-white"
-              : ""
-          }`}
-        >
-          Build EIP712 Signatures
-        </button>
+      <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center">
+        <div className="flex flex-row items-center mb-4 lg:mb-0">
+          <button
+            onClick={() => setPanel(PanelType.SignatureDebugger)}
+            className={`px-4 py-2 rounded-tl rounded-bl bg-gray-100 text-xs uppercase ${
+              panel === PanelType.SignatureDebugger
+                ? "bg-gray-600 text-white"
+                : ""
+            }`}
+          >
+            Build EIP712
+          </button>
 
-        <button
-          onClick={() => setPanel(PanelType.ContractTester)}
-          className={`px-4 py-2 rounded-tr rounded-br bg-gray-100 text-sm uppercase ${
-            panel === PanelType.ContractTester ? "bg-gray-600 text-white" : ""
-          }`}
-        >
-          Test Signatures
-        </button>
+          <button
+            onClick={() => setPanel(PanelType.ContractTester)}
+            className={`px-4 py-2 rounded-tr rounded-br bg-gray-100 text-xs uppercase ${
+              panel === PanelType.ContractTester ? "bg-gray-600 text-white" : ""
+            }`}
+          >
+            Test Contracts
+          </button>
+        </div>
 
-        <div className="border-t border-gray-300 my-4"></div>
+        <div
+          className="flex flex-row mb-2 cursor-pointer"
+          onClick={(e) => copyText(e, wallet?.privateKey)}
+        >
+          <div>
+            <label>Private Key</label>
+
+            {wallet?.privateKey && (
+              <div className="flex flex-row items-center">
+                <p className="text-xs mr-1">{`${wallet.privateKey.slice(
+                  0,
+                  40
+                )}...${wallet.privateKey.slice(-4)}`}</p>
+
+                <div className="w-4 h-4">{copyIcon}</div>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
+
+      <div className="border-t border-gray-300 mb-6"></div>
 
       {panel === PanelType.SignatureDebugger && (
         <SignatureDebugger
@@ -96,6 +125,7 @@ const Home: NextPage = () => {
         <ContractTester
           payload={data}
           signatureResult={signatureResult}
+          wallet={wallet}
           copyIcon={copyIcon}
           copyText={copyText}
         />

@@ -22,15 +22,19 @@ export default function PayloadPreview({ payload, copyIcon, copyText }: Props) {
       className="group relative cursor-pointer rounded-sm bg-gray-100 p-4"
       style={{ fontFamily: "monospace", overflowWrap: "break-word" }}
       onClick={(e) => {
-        Object.entries(payload.message).forEach(([key, value]) => {
+        // Make a copy so we're not changing the actual payload
+        // Use JSON functions to deep copy
+        const temp = JSON.parse(JSON.stringify(payload));
+
+        Object.entries(temp.message).forEach(([key, value]) => {
           if (BigNumber.isBigNumber(value)) {
-            payload.message[key] = `$TEMP$${value}$TEMP$`;
+            temp.message[key] = `$TEMP$${value}$TEMP$`;
           }
         });
 
         // Rendering BigNumber in JSON wraps the values in quotes as a string,
         // but we want it to display as the number value.
-        const json = JSON.stringify(payload, null, 4)
+        const json = JSON.stringify(temp, null, 4)
           .replace('"$TEMP$', "")
           .replace('$TEMP$"', "");
 

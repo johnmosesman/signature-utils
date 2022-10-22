@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 
 // TODO: Add more specific types especially for type fields (address, bytes, etc)
 
+export type ABIInput = { internalType: string; name: string; type: string };
+
 export type ABIItem = {
-  inputs: { internalType: string; name: string; type: string }[];
+  inputs: ABIInput[];
   name: string;
   outputs: { internalType: string; name: string; type: string }[];
   stateMutability: string;
@@ -19,7 +21,7 @@ const fetchABI = async (contractAddress: string): Promise<ABI | null> => {
     method: "GET",
   });
 
-  console.log("response", response);
+  // console.log("response", response);
 
   const abi: ABI | null = await response.json();
 

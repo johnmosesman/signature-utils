@@ -33,7 +33,7 @@ const sign = async (data: EIP712Payload): Promise<SignatureResult> => {
 
     return {
       signature,
-      r: `0x${signature.slice(0, 66)}`,
+      r: `0x${signature.slice(2, 66)}`,
       s: `0x${signature.slice(66, 130)}`,
       v: `0x${signature.slice(signature.length - 2, signature.length)}`,
     };
@@ -57,10 +57,16 @@ const sign = async (data: EIP712Payload): Promise<SignatureResult> => {
   }
 };
 
-export const useSignature = (data: any): SignatureResult | undefined => {
+export const useSignature = (
+  data: EIP712Payload | undefined
+): SignatureResult | undefined => {
   const [signatureResult, setSignatureResult] = useState<SignatureResult>();
 
   useEffect(() => {
+    if (!data) {
+      return;
+    }
+
     sign(data).then((sr) => setSignatureResult(sr));
   }, [data]);
 

@@ -1,3 +1,4 @@
+import { Wallet } from "ethers";
 import { useState } from "react";
 import { EIP712Payload } from "../lib/eip712-utils";
 import { useABI } from "../lib/hooks/use-abi";
@@ -20,7 +21,6 @@ const contractAddressChanged = async (
   e.preventDefault();
 
   console.log("contractAddressChanged()");
-
   const contractAddress = e.target.value;
 
   if (!e.target.value) {
@@ -33,6 +33,7 @@ const contractAddressChanged = async (
 type Props = {
   payload?: EIP712Payload;
   signatureResult?: SignatureResult;
+  wallet?: Wallet;
   copyIcon: JSX.Element;
   copyText: Function;
 };
@@ -40,6 +41,7 @@ type Props = {
 const ContractTester = ({
   payload,
   signatureResult,
+  wallet,
   copyIcon,
   copyText,
 }: Props) => {
@@ -54,7 +56,7 @@ const ContractTester = ({
 
   return (
     <>
-      <p className="mb-8">
+      <p className="mb-8 text-sm">
         Enter a contract address to test your payload against its functions.
       </p>
 
@@ -74,12 +76,12 @@ const ContractTester = ({
 
           {result && (
             <div className="mb-8">
-              <h1 className="mb-2 text-xl">Result</h1>
+              <h2 className="mb-2 text-sm">Result</h2>
             </div>
           )}
 
           <div className="mb-8">
-            <h1 className="mb-2 text-xl">ABI</h1>
+            <h2 className="mb-2 text-xl">ABI</h2>
 
             <div className="bg-white rounded break-all">
               {filteredABI &&
@@ -87,7 +89,9 @@ const ContractTester = ({
                 filteredABI.map((item, index) => {
                   return (
                     <FunctionTester
+                      contractAddress={contractAddress}
                       item={item}
+                      wallet={wallet}
                       payload={payload}
                       signatureResult={signatureResult}
                       key={index}
