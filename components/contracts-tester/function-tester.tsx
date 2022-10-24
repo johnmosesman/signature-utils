@@ -17,20 +17,19 @@ const mapInputsToMessage = (inputs: ABIInput[]): Message => {
 
   const payload: MessagePayloadField[] = filteredInputs.map(
     (input: ABIInput): MessagePayloadField => {
-      const type = input.type.includes("bytes") ? "bytes" : input.type;
-      let defaultValue: string;
+      let defaultValue: string = "0";
 
-      if (type === "address") {
+      if (input.type === "address") {
         defaultValue = ethers.constants.AddressZero;
-      } else if (type.includes("uint")) {
+      } else if (input.type.includes("uint")) {
         defaultValue = "0";
-      } else if (type.includes("bytes")) {
+      } else if (input.type.includes("bytes")) {
         defaultValue = ethers.utils.formatBytes32String("");
       }
 
       return {
         name: input.name,
-        type: type,
+        type: input.type,
         value: defaultValue,
       };
     }

@@ -1,6 +1,12 @@
 import { Message } from "../../lib/eip712-utils";
 
-const PAYLOAD_TYPES = ["uint256", "address", "string", "bytes"].sort();
+const PAYLOAD_TYPES = [
+  "uint256",
+  "address",
+  "string",
+  "bytes",
+  "bytes32",
+].sort();
 
 interface Props {
   message: Message;
