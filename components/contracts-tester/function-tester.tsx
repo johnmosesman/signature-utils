@@ -13,19 +13,23 @@ const handleSubmit = async (
 ) => {
   console.log("handleSubmit", item.name, formData);
 
-  const contract: Contract = new Contract(
-    contractAddress,
-    [item],
-    providers.getDefaultProvider()
-  );
+  try {
+    const contract: Contract = new Contract(
+      contractAddress,
+      [item],
+      providers.getDefaultProvider()
+    );
 
-  console.log("boop", ...Object.values(formData));
+    console.log("boop", ...Object.values(formData));
 
-  const result = await contract.callStatic[item.name](
-    ...Object.values(formData)
-  );
+    const result = await contract.callStatic[item.name](
+      ...Object.values(formData)
+    );
 
-  console.log("result", result);
+    console.log("result", result);
+  } catch (error) {
+    console.error("Error", error);
+  }
 };
 
 type FormData = {

@@ -85,11 +85,26 @@ const Home: NextPage = () => {
           </button>
         </div>
 
-        <div
-          className="flex flex-row mb-2 cursor-pointer"
-          onClick={(e) => copyText(e, wallet?.privateKey)}
-        >
-          <div>
+        <div className="flex flex-col lg:flex-row mb-2 cursor-pointer">
+          <div
+            onClick={(e) => copyText(e, wallet?.address)}
+            className="lg:mr-4"
+          >
+            <label>Public Address</label>
+
+            {wallet?.address && (
+              <div className="flex flex-row items-center">
+                <p className="text-xs mr-1">{`${wallet.address.slice(
+                  0,
+                  40
+                )}...${wallet.address.slice(-4)}`}</p>
+
+                <div className="w-4 h-4">{copyIcon}</div>
+              </div>
+            )}
+          </div>
+
+          <div onClick={(e) => copyText(e, wallet?.privateKey)}>
             <label>Private Key</label>
 
             {wallet?.privateKey && (

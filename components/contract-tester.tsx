@@ -9,11 +9,6 @@ import SignaturePreview from "./signature-debugger/signature-preview";
 
 const mUSDC_ADDRESS = "0xdd9185db084f5c4fff3b4f70e7ba62123b812226";
 
-const executeFunction = async (functionName: string) => {
-  console.log("functionName", functionName);
-  //
-};
-
 const contractAddressChanged = async (
   e: React.ChangeEvent<HTMLInputElement>,
   setContractAddress: Function

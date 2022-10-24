@@ -23,6 +23,8 @@ const fetchABI = async (contractAddress: string): Promise<ABI | null> => {
       method: "GET",
     });
 
+    console.log("resp", response);
+
     const json: ABIResult = await response.json();
     console.log("json", json);
 
