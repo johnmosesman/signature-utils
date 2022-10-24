@@ -1,6 +1,6 @@
 import { Wallet } from "ethers";
 import { useState } from "react";
-import { EIP712Payload } from "../lib/eip712-utils";
+import { EIP712Payload, Message } from "../lib/eip712-utils";
 import { useABI } from "../lib/hooks/use-abi";
 import { SignatureResult } from "../lib/hooks/use-signature";
 import FunctionTester from "./contracts-tester/function-tester";
@@ -31,6 +31,9 @@ type Props = {
   wallet?: Wallet;
   copyIcon: JSX.Element;
   copyText: Function;
+  setPanelToDebugger: Function;
+  message: Message;
+  setMessage: Function;
 };
 
 const ContractTester = ({
@@ -39,6 +42,9 @@ const ContractTester = ({
   wallet,
   copyIcon,
   copyText,
+  setPanelToDebugger,
+  message,
+  setMessage,
 }: Props) => {
   const [contractAddress, setContractAddress] = useState<string>(mUSDC_ADDRESS);
 
@@ -89,6 +95,9 @@ const ContractTester = ({
                       wallet={wallet}
                       payload={payload}
                       signatureResult={signatureResult}
+                      setPanelToDebugger={setPanelToDebugger}
+                      message={message}
+                      setMessage={setMessage}
                       key={index}
                     />
                   );

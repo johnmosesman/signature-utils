@@ -143,6 +143,11 @@ const Home: NextPage = () => {
           wallet={wallet}
           copyIcon={copyIcon}
           copyText={copyText}
+          setPanelToDebugger={() => {
+            setPanel(PanelType.SignatureDebugger);
+          }}
+          message={message}
+          setMessage={setMessage}
         />
       )}
     </main>

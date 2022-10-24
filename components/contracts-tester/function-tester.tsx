@@ -1,9 +1,46 @@
-import { Contract, ethers, providers, Wallet } from "ethers";
+import { Contract, ethers, Wallet } from "ethers";
 import { Field, Formik } from "formik";
 import { useState } from "react";
-import { EIP712Payload } from "../../lib/eip712-utils";
+import {
+  EIP712Payload,
+  Message,
+  MessagePayloadField,
+} from "../../lib/eip712-utils";
 import { ABIInput, ABIItem } from "../../lib/hooks/use-abi";
 import { SignatureResult } from "../../lib/hooks/use-signature";
+
+const mapInputsToMessage = (inputs: ABIInput[]): Message => {
+  const filteredInputs: ABIInput[] = inputs.filter(
+    (input: ABIInput) =>
+      !["v", "r", "s", "signature"].includes(input.name.toLowerCase())
+  );
+
+  const payload: MessagePayloadField[] = filteredInputs.map(
+    (input: ABIInput): MessagePayloadField => {
+      const type = input.type.includes("bytes") ? "bytes" : input.type;
+      let defaultValue: string;
+
+      if (type === "address") {
+        defaultValue = ethers.constants.AddressZero;
+      } else if (type.includes("uint")) {
+        defaultValue = "0";
+      } else if (type.includes("bytes")) {
+        defaultValue = ethers.utils.formatBytes32String("");
+      }
+
+      return {
+        name: input.name,
+        type: type,
+        value: defaultValue,
+      };
+    }
+  );
+
+  return {
+    primaryType: "TODO-PRIMARY-TYPE",
+    payload: payload,
+  };
+};
 
 const handleSubmit = async (
   contractAddress: string,
@@ -17,7 +54,7 @@ const handleSubmit = async (
     const contract: Contract = new Contract(
       contractAddress,
       [item],
-      providers.getDefaultProvider()
+      ethers.providers.getDefaultProvider()
     );
 
     console.log("boop", ...Object.values(formData));
@@ -42,6 +79,9 @@ type Props = {
   wallet?: Wallet;
   contractAddress: string;
   item: ABIItem;
+  setPanelToDebugger: Function;
+  message: Message;
+  setMessage: Function;
 };
 
 export default function FunctionTester({
@@ -50,6 +90,9 @@ export default function FunctionTester({
   contractAddress,
   wallet,
   item,
+  setPanelToDebugger,
+  message,
+  setMessage,
 }: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -157,17 +200,35 @@ export default function FunctionTester({
                       <label className="mb-2">
                         {input.name} ({input.type})
                       </label>
-                      <Field name={input.name} type="text" Required="true" />
+                      <Field name={input.name} type="text" required />
                     </div>
                   );
                 })}
 
-                <button
-                  type="submit"
-                  className="rounded border border-gray-300 px-4 py-1 mt-2 bg-white"
-                >
-                  Static Call
-                </button>
+                <div className="mt-8 flex items-center">
+                  <button
+                    type="submit"
+                    className="rounded border border-gray-300 px-4 py-1 bg-white mr-4"
+                  >
+                    Static Call
+                  </button>
+
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+
+                      setPanelToDebugger();
+
+                      const message: Message = mapInputsToMessage(item.inputs);
+
+                      console.log("Mess", message);
+                      setMessage(message);
+                    }}
+                    className="rounded border border-gray-300 px-4 py-1 bg-white mr-4"
+                  >
+                    Load Parameters In Builder
+                  </button>
+                </div>
               </form>
             )}
           </Formik>
