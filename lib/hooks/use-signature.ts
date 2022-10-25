@@ -1,6 +1,7 @@
-import { ethers } from "ethers";
+import { ethers, Wallet } from "ethers";
 import { useEffect, useState } from "react";
 import { EIP712Payload } from "../eip712-utils";
+import type { JsonRpcSigner } from "@ethersproject/providers";
 
 export interface SignatureResult {
   signature?: string;
@@ -17,14 +18,11 @@ const filteredTypes = (types: EIP712Payload["types"]) => {
   );
 };
 
-const sign = async (data: EIP712Payload): Promise<SignatureResult> => {
+const sign = async (
+  data: EIP712Payload,
+  signer: JsonRpcSigner | Wallet
+): Promise<SignatureResult> => {
   try {
-    const wallet = ethers.Wallet.createRandom();
-    const signer = new ethers.Wallet(
-      wallet.privateKey,
-      ethers.providers.getDefaultProvider()
-    );
-
     const signature: string = await signer._signTypedData(
       data.domain,
       filteredTypes(data.types),
@@ -58,17 +56,18 @@ const sign = async (data: EIP712Payload): Promise<SignatureResult> => {
 };
 
 export const useSignature = (
-  data: EIP712Payload | undefined
+  data: EIP712Payload | undefined,
+  signer: JsonRpcSigner | Wallet | undefined
 ): SignatureResult | undefined => {
   const [signatureResult, setSignatureResult] = useState<SignatureResult>();
 
   useEffect(() => {
-    if (!data) {
+    if (!data || !signer) {
       return;
     }
 
-    sign(data).then((sr) => setSignatureResult(sr));
-  }, [data]);
+    sign(data, signer).then((sr) => setSignatureResult(sr));
+  }, [data, signer]);
 
   return signatureResult;
 };

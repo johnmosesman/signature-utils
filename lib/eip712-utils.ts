@@ -162,9 +162,18 @@ export const buildPayload = (
         return;
       }
 
+      let v: string | BigNumber = value;
+
+      // Wrap in try to avoid error if not a proper BN
+      try {
+        if (type.includes("int")) {
+          v = BigNumber.from(value);
+        }
+      } catch (error) {}
+
       formattedMessage = {
         ...formattedMessage,
-        [name]: type.includes("int") ? BigNumber.from(value) : value,
+        [name]: v,
       };
 
       customType = [

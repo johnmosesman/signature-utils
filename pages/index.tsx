@@ -1,6 +1,7 @@
-import { ethers, providers, Wallet } from "ethers";
+import { ethers, Wallet } from "ethers";
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
+import ConnectedAccount from "../components/connected-account";
 import ContractTester from "../components/contract-tester";
 import SignatureDebugger from "../components/signature-debugger";
 import {
@@ -11,6 +12,7 @@ import {
 } from "../lib/eip712-utils";
 import { usePayload } from "../lib/hooks/use-payload";
 import { useSignature } from "../lib/hooks/use-signature";
+import { useSigner } from "../lib/hooks/use-signer";
 
 enum PanelType {
   SignatureDebugger = "SignatureDebugger",
@@ -47,14 +49,15 @@ const Home: NextPage = () => {
   const [domain, setDomain] = useState<EIP712Payload["domain"]>(DEFAULT_DOMAIN);
   const [message, setMessage] = useState<Message>(DEFAULT_MESSAGE);
 
+  const [wallet, setWallet] = useState<Wallet>();
+
+  const signer = useSigner();
   const data = usePayload(domain, message);
 
   console.log("data is", data);
 
-  const signatureResult = useSignature(data);
+  const signatureResult = useSignature(data, wallet);
   console.log("signatureResult", signatureResult);
-
-  const [wallet, setWallet] = useState<Wallet>();
 
   useEffect(() => {
     setWallet(ethers.Wallet.createRandom());
@@ -62,7 +65,7 @@ const Home: NextPage = () => {
 
   return (
     <main className="relative mx-auto mt-12 min-h-screen bg-white px-4 pb-12 md:px-8 lg:mt-24 lg:max-w-7xl">
-      <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center">
+      <div className="flex flex-col lg:flex-row lg:justify-between lg:items-end">
         <div className="flex flex-row items-center mb-4 lg:mb-0">
           <button
             onClick={() => setPanel(PanelType.SignatureDebugger)}
@@ -85,43 +88,14 @@ const Home: NextPage = () => {
           </button>
         </div>
 
-        <div className="flex flex-col lg:flex-row mb-2 cursor-pointer">
-          <div
-            onClick={(e) => copyText(e, wallet?.address)}
-            className="lg:mr-4"
-          >
-            <label>Public Address</label>
-
-            {wallet?.address && (
-              <div className="flex flex-row items-center">
-                <p className="text-xs mr-1">{`${wallet.address.slice(
-                  0,
-                  40
-                )}...${wallet.address.slice(-4)}`}</p>
-
-                <div className="w-4 h-4">{copyIcon}</div>
-              </div>
-            )}
-          </div>
-
-          <div onClick={(e) => copyText(e, wallet?.privateKey)}>
-            <label>Private Key</label>
-
-            {wallet?.privateKey && (
-              <div className="flex flex-row items-center">
-                <p className="text-xs mr-1">{`${wallet.privateKey.slice(
-                  0,
-                  40
-                )}...${wallet.privateKey.slice(-4)}`}</p>
-
-                <div className="w-4 h-4">{copyIcon}</div>
-              </div>
-            )}
-          </div>
-        </div>
+        <ConnectedAccount
+          wallet={wallet}
+          copyIcon={copyIcon}
+          copyText={copyText}
+        />
       </div>
 
-      <div className="border-t border-gray-300 mb-6"></div>
+      <div className="border-t border-gray-300 mt-2 mb-6"></div>
 
       {panel === PanelType.SignatureDebugger && (
         <SignatureDebugger
