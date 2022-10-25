@@ -107,6 +107,7 @@ const Home: NextPage = () => {
           signatureResult={signatureResult}
           copyIcon={copyIcon}
           copyText={copyText}
+          signer={signer}
         />
       )}
 

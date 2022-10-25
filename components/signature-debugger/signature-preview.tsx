@@ -1,21 +1,30 @@
 import { SignatureResult } from "../../lib/hooks/use-signature";
+import type { JsonRpcSigner } from "@ethersproject/providers";
 
 interface Props {
   signatureResult: SignatureResult | undefined;
   copyIcon: React.ReactElement;
   copyText: Function;
+  signer?: JsonRpcSigner;
 }
 
 export default function SignaturePreview({
   signatureResult,
   copyIcon,
   copyText,
+  signer,
 }: Props) {
   return (
     <div>
+      {signer && (
+        <div>
+          <button>Sign With MetaMask</button>
+        </div>
+      )}
+
       {signatureResult?.error && (
         <div>
-          <p>Error:</p>
+          k <p>Error:</p>
           <div
             className="rounded-sm bg-gray-100 p-4"
             style={{ fontFamily: "monospace", overflowWrap: "break-word" }}
