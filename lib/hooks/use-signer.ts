@@ -26,6 +26,8 @@ export const useSigner = () => {
 
         setSigner(signer);
       });
+    } else {
+      setSigner(undefined);
     }
   }, [status]);
 

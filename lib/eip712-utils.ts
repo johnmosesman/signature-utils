@@ -1,5 +1,7 @@
-import { BigNumber, constants } from "ethers";
+import { BigNumber, constants, Wallet } from "ethers";
 import { hexlify, hexZeroPad } from "ethers/lib/utils";
+import type { JsonRpcSigner } from "@ethersproject/providers";
+import { SignatureResult } from "./hooks/use-signature";
 
 const chainId = 137; // Polygon mainnet
 
@@ -197,4 +199,48 @@ export const buildPayload = (
     primaryType: customTypeName || "",
     message: formattedMessage,
   };
+};
+
+// ethersjs automatically includes the EIP712Domain type so remove it from the payload
+const filteredTypes = (types: EIP712Payload["types"]) => {
+  return Object.fromEntries(
+    Object.entries(types).filter(([k, v]) => k !== "EIP712Domain")
+  );
+};
+
+export const sign = async (
+  data: EIP712Payload,
+  signer: JsonRpcSigner | Wallet
+): Promise<SignatureResult> => {
+  try {
+    const signature: string = await signer._signTypedData(
+      data.domain,
+      filteredTypes(data.types),
+      data.message
+    );
+
+    return {
+      signature,
+      r: `0x${signature.slice(2, 66)}`,
+      s: `0x${signature.slice(66, 130)}`,
+      v: `0x${signature.slice(signature.length - 2, signature.length)}`,
+    };
+  } catch (e) {
+    let message = "";
+
+    if (typeof e === "string") {
+      message = e;
+    } else if (e instanceof Error) {
+      message = e.message;
+    } else {
+      console.log("Unknown error type");
+      message = "Unknown error";
+    }
+
+    console.log("error:", message);
+
+    return {
+      error: message,
+    };
+  }
 };

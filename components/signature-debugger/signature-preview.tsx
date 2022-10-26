@@ -5,23 +5,15 @@ interface Props {
   signatureResult: SignatureResult | undefined;
   copyIcon: React.ReactElement;
   copyText: Function;
-  signer?: JsonRpcSigner;
 }
 
 export default function SignaturePreview({
   signatureResult,
   copyIcon,
   copyText,
-  signer,
 }: Props) {
   return (
     <div>
-      {signer && (
-        <div>
-          <button>Sign With MetaMask</button>
-        </div>
-      )}
-
       {signatureResult?.error && (
         <div>
           k <p>Error:</p>

@@ -56,8 +56,7 @@ const Home: NextPage = () => {
 
   console.log("data is", data);
 
-  const signatureResult = useSignature(data, wallet);
-  console.log("signatureResult", signatureResult);
+  const signatureResult = useSignature(data, wallet, signer);
 
   useEffect(() => {
     setWallet(ethers.Wallet.createRandom());

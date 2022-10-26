@@ -5,6 +5,7 @@ import SignaturePreview from "./signature-debugger/signature-preview";
 import { EIP712Payload, Message } from "../lib/eip712-utils";
 import { SignatureResult } from "../lib/hooks/use-signature";
 import type { JsonRpcSigner } from "@ethersproject/providers";
+import SignaturePreviewSigner from "./signature-debugger/signature-preview-signer";
 
 type Props = {
   domain: EIP712Payload["domain"];
@@ -52,12 +53,23 @@ export default function SignatureDebugger({
         <div className="lg:w-1/2">
           <div className="mb-8">
             <h2 className="mb-2 text-xl">Signature Result</h2>
-            <SignaturePreview
-              signatureResult={signatureResult}
-              copyIcon={copyIcon}
-              copyText={copyText}
-              signer={signer}
-            />
+
+            {!signer && (
+              <SignaturePreview
+                signatureResult={signatureResult}
+                copyIcon={copyIcon}
+                copyText={copyText}
+              />
+            )}
+
+            {signer && (
+              <SignaturePreviewSigner
+                payload={payload}
+                copyIcon={copyIcon}
+                copyText={copyText}
+                signer={signer}
+              />
+            )}
           </div>
 
           <div>
