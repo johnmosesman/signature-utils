@@ -1,5 +1,4 @@
 import { SignatureResult } from "../../lib/hooks/use-signature";
-import type { JsonRpcSigner } from "@ethersproject/providers";
 
 interface Props {
   signatureResult: SignatureResult | undefined;
@@ -16,7 +15,7 @@ export default function SignaturePreview({
     <div>
       {signatureResult?.error && (
         <div>
-          k <p>Error:</p>
+          <p>Error:</p>
           <div
             className="rounded-sm bg-gray-100 p-4"
             style={{ fontFamily: "monospace", overflowWrap: "break-word" }}

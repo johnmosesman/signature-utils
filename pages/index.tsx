@@ -5,15 +5,16 @@ import ConnectedAccount from "../components/connected-account";
 import ContractTester from "../components/contract-tester";
 import SignatureDebugger from "../components/signature-debugger";
 import PayloadPreview from "../components/signature-debugger/payload-preview";
-import SignaturePreviewer from "../components/signature-debugger/signature-previewer";
+import SignaturePreview from "../components/signature-debugger/signature-preview";
 import {
   DEFAULT_DOMAIN,
   DEFAULT_MESSAGE,
   EIP712Payload,
   Message,
+  sign,
 } from "../lib/eip712-utils";
 import { usePayload } from "../lib/hooks/use-payload";
-import { useSignature } from "../lib/hooks/use-signature";
+import { SignatureResult, useSignature } from "../lib/hooks/use-signature";
 import { useSigner } from "../lib/hooks/use-signer";
 
 enum PanelType {
@@ -58,7 +59,13 @@ const Home: NextPage = () => {
 
   console.log("data is", data);
 
-  const signatureResult = useSignature(data, wallet, signer);
+  const [metamaskSignatureResult, setMetamaskSignatureResult] =
+    useState<SignatureResult>();
+  const autoSignatureResult = useSignature(data, wallet, signer);
+
+  const signatureResult: SignatureResult | undefined = signer
+    ? metamaskSignatureResult
+    : autoSignatureResult;
 
   useEffect(() => {
     setWallet(ethers.Wallet.createRandom());
@@ -127,9 +134,20 @@ const Home: NextPage = () => {
         <div className="lg:w-1/2">
           <div className="mb-8">
             <h2 className="mb-2 text-xl">Signature Result</h2>
-            <SignaturePreviewer
-              signer={signer}
-              payload={data}
+
+            {signer && data && (
+              <button
+                onClick={async () => {
+                  const result = await sign(data, signer);
+                  setMetamaskSignatureResult(result);
+                }}
+                className="text-sm text-gray-600 border border-gray-600 rounded px-2 py-1 mb-4"
+              >
+                Sign With MetaMask
+              </button>
+            )}
+
+            <SignaturePreview
               signatureResult={signatureResult}
               copyIcon={copyIcon}
               copyText={copyText}
