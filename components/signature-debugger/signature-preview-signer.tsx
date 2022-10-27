@@ -19,6 +19,8 @@ export default function SignaturePreviewSigner({
 }: Props) {
   const [signatureResult, setSignatureResult] = useState<SignatureResult>();
 
+  console.log("MM sig res", signatureResult);
+
   return (
     <div>
       {signer && payload && (

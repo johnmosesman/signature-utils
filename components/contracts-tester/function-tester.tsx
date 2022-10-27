@@ -1,4 +1,4 @@
-import { Contract, ethers, Wallet } from "ethers";
+import { Contract, ethers, Signer, Wallet } from "ethers";
 import { Field, Formik } from "formik";
 import { useState } from "react";
 import {
@@ -8,6 +8,7 @@ import {
 } from "../../lib/eip712-utils";
 import { ABIInput, ABIItem } from "../../lib/hooks/use-abi";
 import { SignatureResult } from "../../lib/hooks/use-signature";
+import type { JsonRpcSigner } from "@ethersproject/providers";
 
 const mapInputsToMessage = (inputs: ABIInput[]): Message => {
   const filteredInputs: ABIInput[] = inputs.filter(
@@ -44,19 +45,13 @@ const mapInputsToMessage = (inputs: ABIInput[]): Message => {
 const handleSubmit = async (
   contractAddress: string,
   item: ABIItem,
-  wallet: Wallet,
+  signer: Signer,
   formData: FormData
 ) => {
   console.log("handleSubmit", item.name, formData);
 
   try {
-    const contract: Contract = new Contract(
-      contractAddress,
-      [item],
-      ethers.providers.getDefaultProvider()
-    );
-
-    console.log("boop", ...Object.values(formData));
+    const contract: Contract = new Contract(contractAddress, [item], signer);
 
     const result = await contract.callStatic[item.name](
       ...Object.values(formData)
@@ -81,6 +76,7 @@ type Props = {
   setPanelToDebugger: Function;
   message: Message;
   setMessage: Function;
+  signer?: JsonRpcSigner;
 };
 
 export default function FunctionTester({
@@ -92,6 +88,7 @@ export default function FunctionTester({
   setPanelToDebugger,
   message,
   setMessage,
+  signer,
 }: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -179,7 +176,7 @@ export default function FunctionTester({
             // }}
             onSubmit={(values, { setSubmitting }) => {
               console.log("onsubmit", values);
-              handleSubmit(contractAddress, item, wallet, values);
+              handleSubmit(contractAddress, item, signer || wallet, values);
             }}
           >
             {({

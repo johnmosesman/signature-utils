@@ -103,7 +103,11 @@ export const buildPayload = (
 ): EIP712Payload => {
   let eip712DomainType: EIP712DomainField[] = [];
 
+  const presentDomainFields = {} as EIP712Payload["domain"];
+
   if (domain.name) {
+    presentDomainFields["name"] = domain.name;
+
     eip712DomainType = [
       ...eip712DomainType,
       {
@@ -112,7 +116,10 @@ export const buildPayload = (
       },
     ];
   }
+
   if (domain.version) {
+    presentDomainFields["version"] = domain.version;
+
     eip712DomainType = [
       ...eip712DomainType,
       {
@@ -121,7 +128,10 @@ export const buildPayload = (
       },
     ];
   }
+
   if (domain.chainId) {
+    presentDomainFields["chainId"] = domain.chainId;
+
     eip712DomainType = [
       ...eip712DomainType,
       {
@@ -130,7 +140,10 @@ export const buildPayload = (
       },
     ];
   }
+
   if (domain.verifyingContract) {
+    presentDomainFields["verifyingContract"] = domain.verifyingContract;
+
     eip712DomainType = [
       ...eip712DomainType,
       {
@@ -140,6 +153,8 @@ export const buildPayload = (
     ];
   }
   if (domain.salt) {
+    presentDomainFields["salt"] = domain.salt;
+
     eip712DomainType = [
       ...eip712DomainType,
       {
@@ -194,7 +209,7 @@ export const buildPayload = (
   }
 
   return {
-    domain: domain,
+    domain: presentDomainFields,
     types: types,
     primaryType: customTypeName || "",
     message: formattedMessage,

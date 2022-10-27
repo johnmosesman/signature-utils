@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import ConnectedAccount from "../components/connected-account";
 import ContractTester from "../components/contract-tester";
 import SignatureDebugger from "../components/signature-debugger";
+import PayloadPreview from "../components/signature-debugger/payload-preview";
+import SignaturePreviewer from "../components/signature-debugger/signature-previewer";
 import {
   DEFAULT_DOMAIN,
   DEFAULT_MESSAGE,
@@ -96,34 +98,55 @@ const Home: NextPage = () => {
 
       <div className="border-t border-gray-300 mt-2 mb-6"></div>
 
-      {panel === PanelType.SignatureDebugger && (
-        <SignatureDebugger
-          domain={domain}
-          setDomain={setDomain}
-          message={message}
-          setMessage={setMessage}
-          payload={data}
-          signatureResult={signatureResult}
-          copyIcon={copyIcon}
-          copyText={copyText}
-          signer={signer}
-        />
-      )}
+      <div className="lg:flex lg:flex-row">
+        <div className="lg:w-1/2">
+          {panel === PanelType.SignatureDebugger && (
+            <SignatureDebugger
+              domain={domain}
+              setDomain={setDomain}
+              message={message}
+              setMessage={setMessage}
+            />
+          )}
 
-      {panel === PanelType.ContractTester && (
-        <ContractTester
-          payload={data}
-          signatureResult={signatureResult}
-          wallet={wallet}
-          copyIcon={copyIcon}
-          copyText={copyText}
-          setPanelToDebugger={() => {
-            setPanel(PanelType.SignatureDebugger);
-          }}
-          message={message}
-          setMessage={setMessage}
-        />
-      )}
+          {panel === PanelType.ContractTester && (
+            <ContractTester
+              payload={data}
+              signatureResult={signatureResult}
+              wallet={wallet}
+              setPanelToDebugger={() => {
+                setPanel(PanelType.SignatureDebugger);
+              }}
+              message={message}
+              setMessage={setMessage}
+              signer={signer}
+            />
+          )}
+        </div>
+
+        <div className="lg:w-1/2">
+          <div className="mb-8">
+            <h2 className="mb-2 text-xl">Signature Result</h2>
+            <SignaturePreviewer
+              signer={signer}
+              payload={data}
+              signatureResult={signatureResult}
+              copyIcon={copyIcon}
+              copyText={copyText}
+            />
+          </div>
+
+          <div>
+            <h2 className="mb-2 text-xl">EIP-712 Payload</h2>
+
+            <PayloadPreview
+              copyIcon={copyIcon}
+              payload={data}
+              copyText={copyText}
+            />
+          </div>
+        </div>
+      </div>
     </main>
   );
 };
