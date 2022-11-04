@@ -29,58 +29,84 @@ export default function SignaturePreview({
         <div>
           <p>signature:</p>
           <div
-            className="group relative mb-4 cursor-pointer rounded-sm bg-gray-100 p-4"
+            className={`group relative mb-4 rounded-sm bg-gray-100 p-4 ${
+              signatureResult?.signature ? "cursor-pointer" : ""
+            }`}
             style={{ fontFamily: "monospace", overflowWrap: "break-word" }}
-            onClick={(e) => copyText(e, signatureResult?.signature)}
+            onClick={(e) =>
+              signatureResult?.signature &&
+              copyText(e, signatureResult?.signature)
+            }
           >
             <p>{signatureResult?.signature}</p>
 
-            <div className="absolute top-3 right-3 hidden bg-gray-100 group-hover:block">
-              {copyIcon}
-            </div>
+            {signatureResult?.signature && (
+              <div className="absolute top-3 right-3 hidden bg-gray-100 group-hover:block">
+                {copyIcon}
+              </div>
+            )}
           </div>
 
           <div>
             <p>r:</p>
             <div
-              className="group relative mb-4 cursor-pointer rounded-sm bg-gray-100 p-4"
+              className={`group relative mb-4 rounded-sm bg-gray-100 p-4 ${
+                signatureResult?.r ? "cursor-pointer" : ""
+              }`}
               style={{ fontFamily: "monospace", overflowWrap: "break-word" }}
-              onClick={(e) => copyText(e, signatureResult?.r)}
+              onClick={(e) =>
+                signatureResult?.r && copyText(e, signatureResult?.r)
+              }
             >
               <p>{signatureResult?.r}</p>
 
-              <div className="absolute top-3 right-3 hidden bg-gray-100 group-hover:block">
-                {copyIcon}
-              </div>
+              {signatureResult?.r && (
+                <div className="absolute top-3 right-3 hidden bg-gray-100 group-hover:block">
+                  {copyIcon}
+                </div>
+              )}
             </div>
           </div>
 
           <div>
             <p>s:</p>
             <div
-              className="group relative mb-4 cursor-pointer rounded-sm bg-gray-100 p-4"
+              className={`group relative mb-4 rounded-sm bg-gray-100 p-4 ${
+                signatureResult?.s ? "cursor-pointer" : ""
+              }`}
               style={{ fontFamily: "monospace", overflowWrap: "break-word" }}
-              onClick={(e) => copyText(e, signatureResult?.s)}
+              onClick={(e) =>
+                signatureResult?.s && copyText(e, signatureResult?.s)
+              }
             >
               <p>{signatureResult?.s}</p>
 
-              <div className="absolute top-3 right-3 hidden bg-gray-100 group-hover:block">
-                {copyIcon}
-              </div>
+              {signatureResult?.s && (
+                <div className="absolute top-3 right-3 hidden bg-gray-100 group-hover:block">
+                  {copyIcon}
+                </div>
+              )}
             </div>
           </div>
 
           <div>
             <p>v:</p>
             <div
-              className="group relative mb-4 cursor-pointer rounded-sm bg-gray-100 p-4"
+              className={`group relative mb-4 rounded-sm bg-gray-100 p-4 ${
+                signatureResult?.v ? "cursor-pointer" : ""
+              }`}
               style={{ fontFamily: "monospace", overflowWrap: "break-word" }}
-              onClick={(e) => copyText(e, signatureResult?.v)}
+              onClick={(e) =>
+                signatureResult?.v && copyText(e, signatureResult?.v)
+              }
             >
               <p>{signatureResult?.v}</p>
-              <div className="absolute top-3 right-3 hidden bg-gray-100 group-hover:block">
-                {copyIcon}
-              </div>
+
+              {signatureResult?.v && (
+                <div className="absolute top-3 right-3 hidden bg-gray-100 group-hover:block">
+                  {copyIcon}
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { BigNumber, constants, Wallet } from "ethers";
+import { BigNumber, constants, ethers, Wallet } from "ethers";
 import { hexlify, hexZeroPad } from "ethers/lib/utils";
 import type { JsonRpcSigner } from "@ethersproject/providers";
 import { SignatureResult } from "./hooks/use-signature";
@@ -6,30 +6,46 @@ import { SignatureResult } from "./hooks/use-signature";
 const chainId = 137; // Polygon mainnet
 
 export const DEFAULT_DOMAIN: EIP712Payload["domain"] = {
-  name: "MyApp",
-  version: "1.0.0",
-  chainId: chainId,
-  verifyingContract: "0xabcabcabcabcabcabcabcabcabcabcabcabcabca",
+  name: "USD Coin (PoS)",
+  version: "1",
+  // chainId: chainId,
+  verifyingContract: "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
   salt: hexZeroPad(hexlify(chainId), 32),
 };
 
 export const DEFAULT_MESSAGE: Message = {
-  primaryType: "MetaTx",
+  primaryType: "ApproveWithAuthorization",
   payload: [
     {
-      name: "from",
-      value: constants.AddressZero,
+      name: "owner",
+      value: "0x557f41c425a10adcaa3ae2a907d323557592f863", //constants.AddressZero,
       type: "address",
     },
     {
-      name: "to",
-      value: constants.AddressZero,
+      name: "spender",
+      value: "0x9237f18Bc3184c62C8cd4B72d1d8bedBc5Ab2bb2", //constants.AddressZero,
       type: "address",
     },
     {
       name: "value",
       value: (1e18).toString(),
       type: "uint256",
+    },
+    {
+      name: "validAfter",
+      value: "1",
+      type: "uint256",
+    },
+    {
+      name: "validBefore",
+      value: (1e18).toString(),
+      type: "uint256",
+    },
+    {
+      name: "nonce",
+      value:
+        "0x0000000000000000000000000000000000000000000000000000000000000089",
+      type: "bytes32",
     },
   ],
 };
@@ -232,6 +248,15 @@ export const sign = async (
       data.domain,
       filteredTypes(data.types),
       data.message
+    );
+
+    console.log(
+      "HERE",
+      ethers.utils._TypedDataEncoder.getPayload(
+        data.domain,
+        filteredTypes(data.types),
+        data.message
+      )
     );
 
     return {

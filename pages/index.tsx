@@ -16,6 +16,7 @@ import {
 import { usePayload } from "../lib/hooks/use-payload";
 import { SignatureResult, useSignature } from "../lib/hooks/use-signature";
 import { useSigner } from "../lib/hooks/use-signer";
+import toast from "react-hot-toast";
 
 enum PanelType {
   SignatureDebugger = "SignatureDebugger",
@@ -29,7 +30,7 @@ const copyIcon = (
     viewBox="0 0 24 24"
     strokeWidth={1.5}
     stroke="currentColor"
-    className="fil-current stroke-current text-gray-600"
+    className="stroke-current text-gray-600 w-4 h-4"
   >
     <path
       strokeLinecap="round"
@@ -44,6 +45,8 @@ const copyText = (event: any, text: string | undefined) => {
   console.log("copyText", text);
 
   navigator.clipboard.writeText(text || "");
+
+  toast.success("Copied");
 };
 
 const Home: NextPage = () => {
@@ -66,6 +69,8 @@ const Home: NextPage = () => {
   const signatureResult: SignatureResult | undefined = signer
     ? metamaskSignatureResult
     : autoSignatureResult;
+
+  const [callResult, setCallResult] = useState<string>();
 
   useEffect(() => {
     setWallet(ethers.Wallet.createRandom());
@@ -127,11 +132,30 @@ const Home: NextPage = () => {
               message={message}
               setMessage={setMessage}
               signer={signer}
+              setCallResult={setCallResult}
             />
           )}
         </div>
 
         <div className="lg:w-1/2">
+          {callResult && (
+            <div className="mb-8">
+              <h2 className="mb-2 text-xl">Function Call Result</h2>
+
+              <div
+                className="group relative mb-4 cursor-pointer rounded-sm bg-gray-100 p-4"
+                style={{ fontFamily: "monospace", overflowWrap: "break-word" }}
+                onClick={(e) => copyText(e, callResult)}
+              >
+                {callResult}
+
+                <div className="absolute top-3 right-3 hidden bg-gray-100 group-hover:block">
+                  {copyIcon}
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="mb-8">
             <h2 className="mb-2 text-xl">Signature Result</h2>
 
@@ -154,7 +178,7 @@ const Home: NextPage = () => {
             />
           </div>
 
-          <div>
+          <div className="mb-8">
             <h2 className="mb-2 text-xl">EIP-712 Payload</h2>
 
             <PayloadPreview

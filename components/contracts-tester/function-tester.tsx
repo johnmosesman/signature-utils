@@ -1,4 +1,4 @@
-import { Contract, ethers, Signer, Wallet } from "ethers";
+import { Contract, ethers, Wallet } from "ethers";
 import { Field, Formik } from "formik";
 import { useState } from "react";
 import {
@@ -9,6 +9,7 @@ import {
 import { ABIInput, ABIItem } from "../../lib/hooks/use-abi";
 import { SignatureResult } from "../../lib/hooks/use-signature";
 import type { JsonRpcSigner } from "@ethersproject/providers";
+import toast from "react-hot-toast";
 
 const mapInputsToMessage = (inputs: ABIInput[]): Message => {
   const filteredInputs: ABIInput[] = inputs.filter(
@@ -45,9 +46,13 @@ const mapInputsToMessage = (inputs: ABIInput[]): Message => {
 const handleSubmit = async (
   contractAddress: string,
   item: ABIItem,
-  signer: Signer,
-  formData: FormData
+  signer: JsonRpcSigner | Wallet | undefined,
+  formData: FormData,
+  setCallResult: Function
 ) => {
+  if (!signer) {
+    return;
+  }
   console.log("handleSubmit", item.name, formData);
 
   try {
@@ -57,9 +62,15 @@ const handleSubmit = async (
       ...Object.values(formData)
     );
 
+    console.log("result toS", result.toString());
     console.log("result", result);
+
+    setCallResult(result.toString());
+
+    toast.success("Call succeeded");
   } catch (error) {
     console.error("Error", error);
+    toast.error("Call failed");
   }
 };
 
@@ -77,6 +88,7 @@ type Props = {
   message: Message;
   setMessage: Function;
   signer?: JsonRpcSigner;
+  setCallResult: Function;
 };
 
 export default function FunctionTester({
@@ -89,6 +101,7 @@ export default function FunctionTester({
   message,
   setMessage,
   signer,
+  setCallResult,
 }: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -114,6 +127,12 @@ export default function FunctionTester({
     },
     {} as FormData
   );
+
+  // console.log(
+  //   "item",
+  //   item.inputs,
+  //   isOpen && signer !== undefined && wallet !== undefined
+  // );
 
   return (
     <div className="bg-gray-100 flex flex-col mb-4 px-4 py-2">
@@ -159,7 +178,7 @@ export default function FunctionTester({
         )}
       </div>
 
-      {isOpen && wallet && (
+      {isOpen && (signer !== undefined || wallet !== undefined) && (
         <div className="bg-gray-100 mt-4">
           <Formik
             initialValues={initialFormValues}
@@ -176,7 +195,14 @@ export default function FunctionTester({
             // }}
             onSubmit={(values, { setSubmitting }) => {
               console.log("onsubmit", values);
-              handleSubmit(contractAddress, item, signer || wallet, values);
+
+              handleSubmit(
+                contractAddress,
+                item,
+                signer || wallet,
+                values,
+                setCallResult
+              );
             }}
           >
             {({
@@ -217,7 +243,6 @@ export default function FunctionTester({
 
                       const message: Message = mapInputsToMessage(item.inputs);
 
-                      console.log("Mess", message);
                       setMessage(message);
                     }}
                     className="rounded border border-gray-300 px-4 py-1 bg-white mr-4"
@@ -233,3 +258,49 @@ export default function FunctionTester({
     </div>
   );
 }
+
+// const r = await signer._signTypedData(
+//   {
+//     name: "USD Coin (PoS)",
+//     version: "1",
+//     verifyingContract: "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+//     salt: "0x0000000000000000000000000000000000000000000000000000000000000089",
+//   },
+//   {
+//     ApproveWithAuthorization: [
+//       {
+//         name: "owner",
+//         type: "address",
+//       },
+//       {
+//         name: "spender",
+//         type: "address",
+//       },
+//       {
+//         name: "value",
+//         type: "uint256",
+//       },
+//       {
+//         name: "validAfter",
+//         type: "uint256",
+//       },
+//       {
+//         name: "validBefore",
+//         type: "uint256",
+//       },
+//       {
+//         name: "nonce",
+//         type: "bytes32",
+//       },
+//     ],
+//   },
+//   {
+//     owner: "0x557f41c425a10adcaA3AE2a907d323557592f863",
+//     spender: "0x9237f18Bc3184c62C8cd4B72d1d8bedBc5Ab2bb2",
+//     value: "1000000000000000000",
+//     validAfter: "1",
+//     validBefore: "1000000000000000000",
+//     nonce:
+//       "0x1000000000000000000000000000000000000000000000000000000000000089",
+//   }
+// );

@@ -32,6 +32,7 @@ type Props = {
   message: Message;
   setMessage: Function;
   signer?: JsonRpcSigner;
+  setCallResult: Function;
 };
 
 const ContractTester = ({
@@ -42,6 +43,7 @@ const ContractTester = ({
   message,
   setMessage,
   signer,
+  setCallResult,
 }: Props) => {
   const [contractAddress, setContractAddress] = useState<string>(mUSDC_ADDRESS);
 
@@ -96,6 +98,7 @@ const ContractTester = ({
                     setMessage={setMessage}
                     signer={signer}
                     key={index}
+                    setCallResult={setCallResult}
                   />
                 );
               })}
