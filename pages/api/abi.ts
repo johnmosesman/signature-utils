@@ -26,7 +26,7 @@ const fetchABI = async (contractAddress: string): Promise<ABI | null> => {
     console.log("resp", response);
 
     const json: ABIResult = await response.json();
-    console.log("json", json);
+    // console.log("json", json);
 
     return JSON.parse(json.result) as ABI;
   } catch (e) {

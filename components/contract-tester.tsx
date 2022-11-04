@@ -50,14 +50,13 @@ const ContractTester = ({
   const abi = useABI(contractAddress);
   const filteredABI = abi?.filter((item) => item.type === "function");
 
-  // console.log("ftileredABI", filteredABI);
-
-  const [result, setResult] = useState<string>();
+  console.log("contractTester signatureResult", signatureResult);
 
   return (
     <div className="flex flex-col mr-12">
       <p className="mb-8 text-sm">
-        Enter a contract address to test your payload against its functions.
+        Enter a contract address to test your payload against its functions
+        (currently supports Polygon mainnet).
       </p>
 
       <div className="flex flex-col">
@@ -72,12 +71,6 @@ const ContractTester = ({
             placeholder="0xabcabcabcabcabcabcabcabcabcabcabcabcabca"
           />
         </form>
-
-        {result && (
-          <div className="mb-8">
-            <h2 className="mb-2 text-sm">Result</h2>
-          </div>
-        )}
 
         <div className="mb-8">
           <h2 className="mb-2 text-xl">ABI</h2>

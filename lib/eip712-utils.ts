@@ -251,14 +251,14 @@ export const sign = async (
       data.message
     );
 
-    console.log(
-      "HERE",
-      ethers.utils._TypedDataEncoder.getPayload(
-        data.domain,
-        filteredTypes(data.types),
-        data.message
-      )
-    );
+    // console.log(
+    //   "getPayload",
+    //   ethers.utils._TypedDataEncoder.getPayload(
+    //     data.domain,
+    //     filteredTypes(data.types),
+    //     data.message
+    //   )
+    // );
 
     return {
       signature,
