@@ -50,7 +50,7 @@ const ContractTester = ({
   const abi = useABI(contractAddress);
   const filteredABI = abi?.filter((item) => item.type === "function");
 
-  console.log("ftileredABI", filteredABI);
+  // console.log("ftileredABI", filteredABI);
 
   const [result, setResult] = useState<string>();
 

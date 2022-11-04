@@ -2,6 +2,7 @@ import { BigNumber, constants, ethers, Wallet } from "ethers";
 import { hexlify, hexZeroPad } from "ethers/lib/utils";
 import type { JsonRpcSigner } from "@ethersproject/providers";
 import { SignatureResult } from "./hooks/use-signature";
+import { errorToString } from "./utils";
 
 const chainId = 137; // Polygon mainnet
 
@@ -266,18 +267,7 @@ export const sign = async (
       v: `0x${signature.slice(signature.length - 2, signature.length)}`,
     };
   } catch (e) {
-    let message = "";
-
-    if (typeof e === "string") {
-      message = e;
-    } else if (e instanceof Error) {
-      message = e.message;
-    } else {
-      console.log("Unknown error type");
-      message = "Unknown error";
-    }
-
-    console.log("error:", message);
+    const message = errorToString(e);
 
     return {
       error: message,

@@ -10,6 +10,7 @@ import { ABIInput, ABIItem } from "../../lib/hooks/use-abi";
 import { SignatureResult } from "../../lib/hooks/use-signature";
 import type { JsonRpcSigner } from "@ethersproject/providers";
 import toast from "react-hot-toast";
+import { errorToString } from "../../lib/utils";
 
 const mapInputsToMessage = (inputs: ABIInput[]): Message => {
   const filteredInputs: ABIInput[] = inputs.filter(
@@ -57,19 +58,25 @@ const handleSubmit = async (
 
   try {
     const contract: Contract = new Contract(contractAddress, [item], signer);
+    // const contract: Contract = new Contract(
+    //   "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+    //   [item],
+    //   signer
+    // );
 
     const result = await contract.callStatic[item.name](
       ...Object.values(formData)
     );
 
-    console.log("result toS", result.toString());
-    console.log("result", result);
-
-    setCallResult(result.toString());
+    setCallResult(
+      result.toString() || "(call was success but empty result returned)"
+    );
 
     toast.success("Call succeeded");
   } catch (error) {
-    console.error("Error", error);
+    const message = errorToString(error);
+    console.error("Error", message);
+    setCallResult(message);
     toast.error("Call failed");
   }
 };
